@@ -27,6 +27,8 @@ import {
 import "./styles.css";
 
 const storageKey = "mako-linktree.workspace.v1";
+const adminSessionKey = "mako-linktree.admin-unlocked.v1";
+const adminPassword = "080308";
 const customPublicHost = "mako-linktree.hyphen.it.com";
 
 const themes = [
@@ -104,6 +106,8 @@ function App() {
   const [toast, setToast] = useState("모든 변경사항은 이 브라우저에 자동 저장됩니다.");
   const [qrOpen, setQrOpen] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState("");
+  const [adminUnlocked, setAdminUnlocked] = useState(() => sessionStorage.getItem(adminSessionKey) === "true");
+  const [adminLoginOpen, setAdminLoginOpen] = useState(false);
 
   useEffect(() => {
     const onPop = () => setRoute(window.location.pathname);
@@ -132,6 +136,13 @@ function App() {
   function navigateTo(path) {
     window.history.pushState({}, "", path);
     setRoute(path);
+  }
+
+  function unlockAdmin() {
+    sessionStorage.setItem(adminSessionKey, "true");
+    setAdminUnlocked(true);
+    setAdminLoginOpen(false);
+    navigateTo("/studio");
   }
 
   function patchWorkspace(patch) {
@@ -226,11 +237,28 @@ function App() {
 
   if (route.startsWith("/@") || isCustomPublicRoot) {
     return (
-      <PublicPage
-        workspace={workspace}
-        theme={selectedTheme}
-        onTrack={trackClick}
-        onBack={() => navigateTo("/studio")}
+      <>
+        <PublicPage
+          workspace={workspace}
+          theme={selectedTheme}
+          onTrack={trackClick}
+          onAdminRequest={() => setAdminLoginOpen(true)}
+        />
+        {adminLoginOpen ? (
+          <AdminLoginModal
+            onClose={() => setAdminLoginOpen(false)}
+            onUnlock={unlockAdmin}
+          />
+        ) : null}
+      </>
+    );
+  }
+
+  if (!adminUnlocked) {
+    return (
+      <AdminLoginPage
+        onUnlock={unlockAdmin}
+        onPublic={() => navigateTo(publicPath(workspace.profile.handle))}
       />
     );
   }
@@ -531,14 +559,28 @@ function Analytics({ links }) {
   );
 }
 
-function PublicPage({ workspace, theme, onTrack, onBack }) {
+function PublicPage({ workspace, theme, onTrack, onAdminRequest }) {
+  const [adminTapCount, setAdminTapCount] = useState(0);
+
+  function handleAdminTap() {
+    setAdminTapCount((count) => {
+      const nextCount = count + 1;
+      if (nextCount >= 3) {
+        onAdminRequest();
+        return 0;
+      }
+      window.setTimeout(() => setAdminTapCount(0), 1200);
+      return nextCount;
+    });
+  }
+
   if (!workspace.published) {
     return (
       <main className="public-page is-private">
+        <button className="admin-hotspot" aria-label="운영 로그인" onClick={handleAdminTap} />
         <section>
           <strong>MAKO Link</strong>
           <h1>현재 비공개 링크입니다.</h1>
-          <button onClick={onBack}>관리 화면으로 돌아가기</button>
         </section>
       </main>
     );
@@ -552,6 +594,7 @@ function PublicPage({ workspace, theme, onTrack, onBack }) {
         "--preview-ink": theme.ink,
       }}
     >
+      <button className="admin-hotspot" aria-label="운영 로그인" onClick={handleAdminTap} />
       <div className="public-shell-label">
         <span>MAKO LINK</span>
         <strong>{workspace.profile.handle}</strong>
@@ -571,6 +614,75 @@ function PublicPage({ workspace, theme, onTrack, onBack }) {
         <small>Made with MAKO Link</small>
       </section>
     </main>
+  );
+}
+
+function useAdminPasswordForm(onUnlock) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  function submit(event) {
+    event.preventDefault();
+    if (password === adminPassword) {
+      onUnlock();
+      return;
+    }
+    setPassword("");
+    setError("비밀번호를 확인하세요.");
+  }
+
+  return { password, setPassword, error, submit };
+}
+
+function AdminLoginPage({ onUnlock, onPublic }) {
+  const { password, setPassword, error, submit } = useAdminPasswordForm(onUnlock);
+
+  return (
+    <main className="admin-login-page">
+      <form className="admin-login-card" onSubmit={submit}>
+        <span>MAKO Link</span>
+        <h1>운영 로그인</h1>
+        <input
+          autoFocus
+          inputMode="numeric"
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+        {error ? <p>{error}</p> : null}
+        <button className="dark-button" type="submit">입장</button>
+        <button className="ghost-button" type="button" onClick={onPublic}>공개 페이지</button>
+      </form>
+    </main>
+  );
+}
+
+function AdminLoginModal({ onClose, onUnlock }) {
+  const { password, setPassword, error, submit } = useAdminPasswordForm(onUnlock);
+
+  return (
+    <div className="modal-backdrop" role="dialog" aria-modal="true">
+      <form className="admin-login-card admin-login-modal" onSubmit={submit}>
+        <div className="panel-head">
+          <div>
+            <p className="eyebrow">MAKO LINK</p>
+            <h2>운영 로그인</h2>
+          </div>
+          <button className="icon-button" type="button" onClick={onClose}>닫기</button>
+        </div>
+        <input
+          autoFocus
+          inputMode="numeric"
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+        {error ? <p>{error}</p> : null}
+        <button className="dark-button" type="submit">입장</button>
+      </form>
+    </div>
   );
 }
 

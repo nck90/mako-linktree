@@ -954,6 +954,79 @@ select:focus-visible {
   text-decoration: none;
 }
 
+.admin-login-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 0, rgba(0, 122, 255, .14), transparent 34%),
+    #f2f2f7;
+  padding: 24px;
+}
+
+.admin-login-card {
+  display: grid;
+  gap: 12px;
+  width: min(390px, 100%);
+  border: 1px solid rgba(255,255,255,.74);
+  border-radius: 28px;
+  background: rgba(255,255,255,.84);
+  padding: 20px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.16);
+  backdrop-filter: blur(18px);
+}
+
+.admin-login-card span {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.admin-login-card h1,
+.admin-login-card h2 {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.admin-login-card input {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,255,255,.9);
+  padding: 0 14px;
+  color: var(--ink);
+  outline: none;
+}
+
+.admin-login-card input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(0,122,255,.12);
+}
+
+.admin-login-card p {
+  margin: 0;
+  color: #ff3b30;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.admin-login-modal {
+  width: min(410px, 100%);
+}
+
+.admin-hotspot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 72px;
+  height: 72px;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+}
+
 .public-page {
   position: relative;
   overflow: hidden;
@@ -1063,7 +1136,7 @@ select:focus-visible {
   font-weight: 850;
 }
 
-.public-page.is-private button {
+.public-page.is-private button:not(.admin-hotspot) {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: rgba(255,255,255,.82);
