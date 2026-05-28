@@ -27,6 +27,7 @@ import {
 import "./styles.css";
 
 const storageKey = "mako-linktree.workspace.v1";
+const customPublicHost = "mako-linktree.hyphen.it.com";
 
 const themes = [
   { id: "mako", name: "MAKO", label: "운영형 딥그린", surface: "#f8f7f3", accent: "#003f33", ink: "#17171c", glow: "#ff7759" },
@@ -82,6 +83,7 @@ function loadWorkspace() {
 }
 
 function publicPath(handle) {
+  if (window.location.hostname === customPublicHost) return "/";
   return `/@${encodeURIComponent(handle || "mako.official")}`;
 }
 
@@ -115,6 +117,7 @@ function App() {
 
   const selectedTheme = themes.find((theme) => theme.id === workspace.theme) || themes[0];
   const publicUrl = getPublicUrl(workspace.profile.handle);
+  const isCustomPublicRoot = window.location.hostname === customPublicHost && route === "/";
 
   async function openQr() {
     const dataUrl = await QRCode.toDataURL(publicUrl, {
@@ -221,13 +224,13 @@ function App() {
     setToast("클릭 집계를 초기화했습니다.");
   }
 
-  if (route.startsWith("/@")) {
+  if (route.startsWith("/@") || isCustomPublicRoot) {
     return (
       <PublicPage
         workspace={workspace}
         theme={selectedTheme}
         onTrack={trackClick}
-        onBack={() => navigateTo("/")}
+        onBack={() => navigateTo("/studio")}
       />
     );
   }
@@ -235,7 +238,7 @@ function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <button className="brand" onClick={() => navigateTo("/")}>
+        <button className="brand" onClick={() => navigateTo("/studio")}>
           <span>M</span>
           <strong>MAKO Link</strong>
           <small>profile link builder</small>
