@@ -472,6 +472,10 @@ function PreviewInspector({ workspace, theme, publicUrl, onTrack, onOpenPublic, 
 }
 
 function PhonePreview({ workspace, theme, onTrack }) {
+  return <PhoneSurface workspace={workspace} theme={theme} onTrack={onTrack} preview />;
+}
+
+function PhoneSurface({ workspace, theme, onTrack, preview = false }) {
   return (
     <section
       className="phone"
@@ -487,7 +491,7 @@ function PhonePreview({ workspace, theme, onTrack }) {
         <span>5G</span>
       </div>
       <ProfileBlock workspace={workspace} />
-      <LinkList links={workspace.links.filter((link) => link.active)} onTrack={onTrack} preview />
+      <LinkList links={workspace.links.filter((link) => link.active)} onTrack={onTrack} preview={preview} />
       <footer className="phone-footer">
         <span>Made with</span>
         <strong>MAKO Link</strong>
@@ -595,24 +599,9 @@ function PublicPage({ workspace, theme, onTrack, onAdminRequest }) {
       }}
     >
       <button className="admin-hotspot" aria-label="운영 로그인" onClick={handleAdminTap} />
-      <div className="public-shell-label">
-        <span>MAKO LINK</span>
-        <strong>{workspace.profile.handle}</strong>
+      <div className="public-device-stage">
+        <PhoneSurface workspace={workspace} theme={theme} onTrack={onTrack} />
       </div>
-      <section className="public-card">
-        <div className="public-brand-strip">
-          <span>MAKO LINK</span>
-          <em>{workspace.published ? "LIVE" : "PRIVATE"}</em>
-        </div>
-        <ProfileBlock workspace={workspace} />
-        <div className="public-proof-strip">
-          <span>Campaign</span>
-          <span>Booking</span>
-          <span>{workspace.links.filter((link) => link.active).length} Links</span>
-        </div>
-        <LinkList links={workspace.links.filter((link) => link.active)} onTrack={onTrack} />
-        <small>Made with MAKO Link</small>
-      </section>
     </main>
   );
 }
