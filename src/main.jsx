@@ -599,6 +599,10 @@ function PublicPage({ workspace, theme, onTrack, onAdminRequest }) {
       }}
     >
       <button className="admin-hotspot" aria-label="운영 로그인" onClick={handleAdminTap} />
+      <div className="public-shell-label">
+        <span>MAKO LINK</span>
+        <strong>{workspace.profile.handle}</strong>
+      </div>
       <div className="public-device-stage">
         <PhoneSurface workspace={workspace} theme={theme} onTrack={onTrack} />
       </div>

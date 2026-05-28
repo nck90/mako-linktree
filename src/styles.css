@@ -609,7 +609,7 @@ select:focus-visible {
   position: relative;
   display: grid;
   gap: 13px;
-  width: min(338px, 100%);
+  width: min(368px, 100%);
   margin: 0 auto;
   border: 10px solid #0b0c10;
   border-radius: 48px;
@@ -1034,19 +1034,43 @@ select:focus-visible {
   min-height: 100vh;
   place-items: center;
   background:
-    radial-gradient(circle at 50% -12%, color-mix(in srgb, var(--preview-accent) 13%, transparent), transparent 34%),
-    linear-gradient(180deg, #fbfbfd, #f2f2f7);
-  padding: clamp(18px, 4vh, 36px) 18px;
+    radial-gradient(circle at 50% -10%, rgba(255,255,255,.92), transparent 32%),
+    linear-gradient(90deg, color-mix(in srgb, var(--preview-accent) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(180deg, color-mix(in srgb, var(--preview-accent) 4%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0, color-mix(in srgb, var(--preview-accent) 17%, transparent), transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--preview-accent) 9%, white), var(--preview-surface));
+  background-size: 34px 34px, 34px 34px, auto, auto;
+  padding: clamp(24px, 5vh, 44px) 18px;
+}
+
+.public-shell-label {
+  position: fixed;
+  top: clamp(18px, 4vw, 42px);
+  left: clamp(18px, 5vw, 64px);
+  display: grid;
+  gap: 2px;
+  color: var(--preview-accent);
+}
+
+.public-shell-label span {
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: .14em;
+}
+
+.public-shell-label strong {
+  color: color-mix(in srgb, var(--preview-ink) 72%, transparent);
+  font-size: 13px;
 }
 
 .public-device-stage {
   display: grid;
-  width: min(390px, 100%);
+  width: min(430px, 100%);
   place-items: center;
 }
 
 .public-device-stage .phone {
-  width: min(338px, calc(100vw - 36px));
+  width: min(378px, calc(100vw - 28px));
   min-height: min(760px, calc(100vh - 44px));
 }
 
