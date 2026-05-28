@@ -282,7 +282,7 @@ select:focus-visible {
 
 .workspace {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(340px, 390px);
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 480px);
   gap: 16px;
   align-items: start;
 }
@@ -607,49 +607,60 @@ select:focus-visible {
   --preview-accent: var(--green);
   --preview-ink: var(--ink);
   position: relative;
+  isolation: isolate;
   display: grid;
-  gap: 13px;
-  width: min(368px, 100%);
+  gap: 14px;
+  width: min(408px, 100%);
   margin: 0 auto;
-  border: 10px solid #0b0c10;
-  border-radius: 48px;
+  border: 12px solid transparent;
+  border-radius: 58px;
   background:
+    radial-gradient(circle at 22% 0, rgba(255,255,255,.9), transparent 28%) padding-box,
+    linear-gradient(120deg, rgba(255,255,255,.54), transparent 18%, transparent 82%, rgba(255,255,255,.28)) padding-box,
     linear-gradient(90deg, color-mix(in srgb, var(--preview-accent) 4%, transparent) 1px, transparent 1px),
     linear-gradient(180deg, color-mix(in srgb, var(--preview-accent) 4%, transparent) 1px, transparent 1px),
     radial-gradient(circle at 50% -12%, color-mix(in srgb, var(--preview-accent) 16%, transparent), transparent 34%),
-    linear-gradient(180deg, color-mix(in srgb, var(--preview-accent) 8%, #ffffff), var(--preview-surface));
+    linear-gradient(180deg, color-mix(in srgb, var(--preview-accent) 8%, #ffffff), var(--preview-surface)) padding-box,
+    linear-gradient(145deg, #050608 0%, #303640 11%, #0b0d12 28%, #050608 54%, #454b56 72%, #08090d 100%) border-box;
   background-size: 24px 24px, 24px 24px, auto, auto;
-  padding: 16px 14px 18px;
+  padding: 17px 16px 20px;
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.08),
-    0 32px 80px rgba(7, 24, 41, .32);
+    inset 0 0 0 1px rgba(255,255,255,.36),
+    inset 0 0 0 2px rgba(255,255,255,.1),
+    inset 0 -28px 56px rgba(0,0,0,.06),
+    0 1px 0 rgba(255,255,255,.86),
+    0 20px 48px rgba(7, 24, 41, .2),
+    0 44px 110px rgba(7, 24, 41, .36);
 }
 
 .phone::before,
 .phone::after {
   content: "";
   position: absolute;
-  right: -13px;
-  width: 3px;
+  z-index: -1;
+  width: 4px;
   border-radius: 999px;
-  background: #0b0c10;
+  background: linear-gradient(180deg, #2c3139, #08090d 30%, #383e48);
+  box-shadow: inset 1px 0 0 rgba(255,255,255,.16);
 }
 
 .phone::before {
-  top: 118px;
-  height: 54px;
+  left: -16px;
+  top: 128px;
+  height: 86px;
 }
 
 .phone::after {
-  top: 188px;
-  height: 74px;
+  right: -16px;
+  top: 152px;
+  height: 104px;
 }
 
 .phone-top {
   display: grid;
-  grid-template-columns: 1fr 92px 1fr;
+  grid-template-columns: 1fr 108px 1fr;
   align-items: center;
-  min-height: 22px;
+  min-height: 27px;
   color: color-mix(in srgb, var(--preview-ink) 70%, transparent);
   font-size: 11px;
   font-weight: 900;
@@ -660,11 +671,17 @@ select:focus-visible {
 }
 
 .phone-island {
-  width: 92px;
-  height: 27px;
+  position: relative;
+  width: 108px;
+  height: 31px;
   border-radius: 999px;
-  background: #0d0e12;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+  background:
+    radial-gradient(circle at 74% 50%, #202632 0 5px, #050608 6px 8px, transparent 9px),
+    linear-gradient(180deg, #151821, #050608 62%, #11141b);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.13),
+    inset 0 -1px 0 rgba(255,255,255,.08),
+    0 1px 2px rgba(255,255,255,.22);
 }
 
 .profile-card {
@@ -672,12 +689,16 @@ select:focus-visible {
   justify-items: center;
   gap: 9px;
   border: 1px solid rgba(255,255,255,.75);
-  border-radius: 28px;
+  border-radius: 32px;
   background:
+    radial-gradient(circle at 22% 0, rgba(255,255,255,.92), transparent 35%),
     linear-gradient(135deg, color-mix(in srgb, var(--preview-accent) 7%, transparent), transparent 44%),
     linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.62));
-  padding: 20px 14px;
+  padding: 22px 16px;
   text-align: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.68),
+    0 18px 44px rgba(7, 24, 41, .08);
   backdrop-filter: blur(12px);
 }
 
@@ -743,26 +764,31 @@ select:focus-visible {
 
 .mobile-links a {
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) 18px;
+  grid-template-columns: 40px minmax(0, 1fr) 20px;
   align-items: center;
-  gap: 10px;
-  min-height: 58px;
+  gap: 11px;
+  min-height: 62px;
   border: 1px solid rgba(255,255,255,.78);
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.82));
-  padding: 10px 13px;
+  border-radius: 21px;
+  background:
+    linear-gradient(110deg, rgba(255,255,255,.98), rgba(255,255,255,.82) 64%, color-mix(in srgb, var(--preview-accent) 5%, white));
+  padding: 11px 14px;
   color: var(--ink);
   text-decoration: none;
-  box-shadow: 0 9px 24px rgba(7, 24, 41, .08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.72),
+    0 12px 28px rgba(7, 24, 41, .09);
   transition: transform .16s ease, box-shadow .16s ease;
 }
 
 .mobile-links a.is-featured {
-  min-height: 70px;
+  min-height: 74px;
   border-color: color-mix(in srgb, var(--preview-accent) 26%, white);
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--preview-accent) 13%, white), rgba(255,255,255,.94));
+    radial-gradient(circle at 12% 0, rgba(255,255,255,.94), transparent 38%),
+    linear-gradient(135deg, color-mix(in srgb, var(--preview-accent) 15%, white), rgba(255,255,255,.94));
   box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.78),
     0 13px 32px color-mix(in srgb, var(--preview-accent) 12%, transparent),
     0 8px 22px rgba(7, 24, 41, .08);
 }
@@ -774,12 +800,15 @@ select:focus-visible {
 
 .mobile-links a > svg:first-child {
   display: grid;
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--preview-accent) 10%, white);
-  padding: 9px;
+  width: 40px;
+  height: 40px;
+  border-radius: 15px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.68), rgba(255,255,255,.18)),
+    color-mix(in srgb, var(--preview-accent) 10%, white);
+  padding: 10px;
   color: var(--preview-accent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.72);
 }
 
 .link-copy {
@@ -1065,12 +1094,12 @@ select:focus-visible {
 
 .public-device-stage {
   display: grid;
-  width: min(430px, 100%);
+  width: min(470px, 100%);
   place-items: center;
 }
 
 .public-device-stage .phone {
-  width: min(378px, calc(100vw - 28px));
+  width: min(424px, calc(100vw - 24px));
   min-height: min(760px, calc(100vh - 44px));
 }
 
@@ -1103,7 +1132,7 @@ select:focus-visible {
 
   .preview-column {
     position: static;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 390px);
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 470px);
     align-items: start;
   }
 }
@@ -1193,7 +1222,7 @@ select:focus-visible {
   }
 
   .phone {
-    width: min(330px, 100%);
+    width: min(382px, 100%);
   }
 
   .toast {
