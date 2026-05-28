@@ -517,7 +517,7 @@ function LinkList({ links, onTrack, preview = false }) {
     <div className="mobile-links">
       {links.map((link, index) => (
         <a
-          className={link.featured || index === 0 ? "is-featured" : ""}
+          className=""
           href={normalizeUrl(link.url)}
           key={link.id}
           target={preview ? undefined : "_blank"}
