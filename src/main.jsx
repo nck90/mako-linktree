@@ -14,6 +14,7 @@ import {
   Eye,
   FileDown,
   FileText,
+  Gift,
   Globe2,
   Images,
   Link2,
@@ -27,6 +28,7 @@ import {
   Sparkles,
   Trash2,
   Upload,
+  X,
 } from "lucide-react";
 import "./styles.css";
 
@@ -37,6 +39,11 @@ const customPublicHost = "mako-linktree.hyphen.it.com";
 const landingPageUrl = "https://mako-landing.hyphen.it.com/";
 const apiBaseUrl = String(import.meta.env.VITE_MAKO_API_BASE_URL || "").replace(/\/$/, "");
 const consultationApiPath = `${apiBaseUrl}/api/public/mako-consultations`;
+const betaEvent = {
+  popupImage: "/events/mako-beta-popup.png",
+  detailImage: "/events/mako-beta-detail.png",
+  deadline: "2026년 6월 5일",
+};
 
 const themes = [
   { id: "mako", name: "MAKO", label: "운영형 딥그린", surface: "#f8f7f3", accent: "#003f33", ink: "#17171c", glow: "#ff7759" },
@@ -135,7 +142,7 @@ function normalizeUrl(value) {
 }
 
 function isInternalPath(value) {
-  return /^\/(consult|samples|proposal)(\/)?$/i.test(String(value || "").trim());
+  return /^\/(consult|samples|proposal|event)(\/)?$/i.test(String(value || "").trim());
 }
 
 function App() {
@@ -147,6 +154,7 @@ function App() {
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [adminUnlocked, setAdminUnlocked] = useState(() => sessionStorage.getItem(adminSessionKey) === "true");
   const [adminLoginOpen, setAdminLoginOpen] = useState(false);
+  const [eventPopupOpen, setEventPopupOpen] = useState(true);
 
   useEffect(() => {
     const onPop = () => setRoute(window.location.pathname);
@@ -334,6 +342,10 @@ function App() {
     return <ProposalPage onBack={() => navigateTo(publicPath(workspace.profile.handle))} onConsult={() => navigateTo("/consult")} />;
   }
 
+  if (route === "/event") {
+    return <EventPage onBack={() => navigateTo(publicPath(workspace.profile.handle))} onConsult={() => navigateTo("/consult")} />;
+  }
+
   if (route.startsWith("/@") || isCustomPublicRoot) {
     return (
       <>
@@ -344,6 +356,19 @@ function App() {
           onNavigate={navigateTo}
           onAdminRequest={() => setAdminLoginOpen(true)}
         />
+        {eventPopupOpen ? (
+          <BetaEventPopup
+            onClose={() => setEventPopupOpen(false)}
+            onDetail={() => {
+              setEventPopupOpen(false);
+              navigateTo("/event");
+            }}
+            onApply={() => {
+              setEventPopupOpen(false);
+              navigateTo("/consult");
+            }}
+          />
+        ) : null}
         {adminLoginOpen ? (
           <AdminLoginModal
             onClose={() => setAdminLoginOpen(false)}
@@ -1170,6 +1195,71 @@ function ProposalPage({ onBack, onConsult }) {
         <img src="/showcase/mako-brochure-page2.png" alt="MAKO 제안서 두 번째 페이지" />
       </section>
     </ExpoPageShell>
+  );
+}
+
+function EventPage({ onBack, onConsult }) {
+  return (
+    <ExpoPageShell
+      eyebrow="BETA EVENT"
+      title="6월 5일까지 베타 신청 이벤트"
+      lead="박람회 기간과 초기 베타 신청 팀에게 MAKO 도입 컨설팅과 브랜드 맞춤형 제작 지원을 함께 제공합니다."
+      onBack={onBack}
+      action={<button className="expo-primary" onClick={onConsult}>베타 상담 신청</button>}
+    >
+      <section className="event-detail-hero">
+        <img src={betaEvent.detailImage} alt="MAKO 베타 신청 이벤트 안내" />
+      </section>
+      <section className="event-benefit-grid">
+        <article>
+          <span>01</span>
+          <h2>무료 컨설팅</h2>
+          <p>브랜드 자료, 현재 운영 채널, 필요한 산출물을 기준으로 첫 캠페인 구조와 실행 우선순위를 정리합니다.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>맞춤형 제작비 지원</h2>
+          <p>초기 베타 팀은 랜딩페이지, 카드뉴스, 블로그, 카페, 쓰레드 제작 범위를 검토해 제작비 일부를 지원받을 수 있습니다.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>산출물 패키지 제안</h2>
+          <p>단순 상담에서 끝내지 않고 브랜드별 후킹, 콘텐츠 흐름, 채널별 원고까지 바로 검토 가능한 형태로 제안합니다.</p>
+        </article>
+      </section>
+      <section className="event-steps">
+        <div>
+          <p className="eyebrow">HOW IT WORKS</p>
+          <h2>신청 후 진행 방식</h2>
+        </div>
+        <ol>
+          <li><strong>베타 신청</strong><span>상담 예약 또는 현장 QR로 신청 정보를 남깁니다.</span></li>
+          <li><strong>자료 확인</strong><span>브랜드 소개서, 제품 자료, 기존 콘텐츠를 기준으로 필요한 제작 범위를 확인합니다.</span></li>
+          <li><strong>컨설팅 진행</strong><span>무료 컨설팅에서 랜딩/콘텐츠/운영 자동화 방향을 정리합니다.</span></li>
+          <li><strong>맞춤 제작 제안</strong><span>지원 가능 범위와 제작 일정, 우선 제작 산출물을 안내합니다.</span></li>
+        </ol>
+      </section>
+    </ExpoPageShell>
+  );
+}
+
+function BetaEventPopup({ onClose, onDetail, onApply }) {
+  return (
+    <div className="event-popup-backdrop" role="dialog" aria-modal="true" aria-label="MAKO 베타 신청 이벤트">
+      <section className="event-popup">
+        <button type="button" className="event-popup-close" aria-label="닫기" onClick={onClose}><X size={18} /></button>
+        <img src={betaEvent.popupImage} alt="6월 5일까지 MAKO 베타 신청 이벤트" />
+        <div className="event-popup-copy">
+          <span><Gift size={15} /> {betaEvent.deadline}까지</span>
+          <h2>베타 신청 팀에게 무료 컨설팅과 맞춤형 제작비 지원을 제공합니다.</h2>
+          <p>브랜드 자료를 바탕으로 랜딩페이지, 카드뉴스, 블로그, 카페, 쓰레드까지 실제 운영 가능한 산출물 방향을 함께 잡아드립니다.</p>
+          <div>
+            <button type="button" onClick={onApply}>지금 신청하기</button>
+            <button type="button" onClick={onDetail}>상세 안내 보기</button>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 

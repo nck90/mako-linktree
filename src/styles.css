@@ -951,6 +951,114 @@ select:focus-visible {
   padding: 20px;
 }
 
+.event-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgba(7, 9, 11, .48);
+  padding: 18px;
+  backdrop-filter: blur(10px);
+}
+
+.event-popup {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(280px, .72fr);
+  width: min(940px, 100%);
+  max-height: min(88svh, 780px);
+  border: 1px solid rgba(255,255,255,.66);
+  border-radius: 22px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 28px 90px rgba(0,0,0,.28);
+}
+
+.event-popup img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.event-popup-copy {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  padding: 28px;
+}
+
+.event-popup-copy span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  border: 1px solid color-mix(in srgb, var(--green) 18%, white);
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.event-popup-copy h2 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.14;
+  letter-spacing: 0;
+}
+
+.event-popup-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.event-popup-copy div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 8px;
+}
+
+.event-popup-copy button,
+.event-popup-close {
+  border: 0;
+  border-radius: 12px;
+  font-weight: 900;
+}
+
+.event-popup-copy button {
+  min-height: 42px;
+  background: var(--green);
+  color: white;
+  padding: 0 16px;
+}
+
+.event-popup-copy button + button {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+}
+
+.event-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,.9);
+  color: var(--ink);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
 .qr-modal {
   display: grid;
   gap: 14px;
@@ -1767,6 +1875,85 @@ select:focus-visible {
   background: white;
 }
 
+.event-detail-hero {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.event-detail-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.event-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.event-benefit-grid article,
+.event-steps {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.82);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.event-benefit-grid span {
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+
+.event-benefit-grid h2,
+.event-steps h2 {
+  margin: 8px 0;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.event-benefit-grid p,
+.event-steps span {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.event-steps {
+  display: grid;
+  grid-template-columns: minmax(210px, .42fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.event-steps ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event-steps li {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: white;
+  padding: 14px;
+}
+
+.event-steps strong {
+  color: var(--green);
+}
+
 .consult-admin-tools {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1955,6 +2142,8 @@ select:focus-visible {
   .output-summary,
   .sample-grid,
   .proposal-grid,
+  .event-benefit-grid,
+  .event-steps,
   .text-output-grid,
   .proposal-output-grid,
   .consult-admin-tools {
@@ -2013,7 +2202,7 @@ select:focus-visible {
 
   .public-page {
     align-content: start;
-    padding: 0;
+    padding: 72px 0 0;
   }
 
   .public-shell-label {
@@ -2028,6 +2217,32 @@ select:focus-visible {
   .public-device-stage {
     width: 100dvw;
     padding: 6px;
+  }
+
+  .event-popup {
+    grid-template-columns: 1fr;
+    width: min(430px, 100%);
+    max-height: 92svh;
+    overflow-y: auto;
+  }
+
+  .event-popup img {
+    max-height: 54svh;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .event-popup-copy {
+    padding: 18px;
+  }
+
+  .event-popup-copy div,
+  .event-popup-copy button {
+    width: 100%;
+  }
+
+  .event-steps li {
+    grid-template-columns: 1fr;
   }
 }
 
